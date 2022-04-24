@@ -1,0 +1,14 @@
+{
+  "block.glass.glass_projector":"GLASS Projector",
+  "block.glass.glass_terminal":"GLASS Terminal",
+  "block.glass.glass_extension":"GLASS Extension",
+  "block.glass.glass_wireless_extension":"GLASS Wireless Extension",
+
+  "glass.gui.channelName" : "Channel Name",
+  "glass.gui.publicChannel" : "Public Channel",
+  "glass.gui.public": "<Public>",
+
+  "gui.yes" : "Yes",
+  "gui.no" : "No"
+
+}

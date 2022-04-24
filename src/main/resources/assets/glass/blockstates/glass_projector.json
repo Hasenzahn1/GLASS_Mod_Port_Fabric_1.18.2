@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=north": { "model": "glass:block/glass_projector" },
+    "facing=east": { "model": "glass:block/glass_projector" },
+    "facing=west": { "model": "glass:block/glass_projector" },
+    "facing=south": { "model": "glass:block/glass_projector" },
+    "facing=up": { "model": "glass:block/glass_projector" },
+    "facing=down": { "model": "glass:block/glass_projector" }
+  }
+}
