@@ -29,14 +29,13 @@ public class GlassProjectorScreen extends HandledScreen<GlassProjectorScreenHand
 
     @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
-        /*RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
         int x = (width - 93) / 2;
         int y = (height - 75) / 2;
         drawTexture(matrices, x, y, 0, 0, 93, 75);
 
-         */
     }
 
     @Override
@@ -67,7 +66,7 @@ public class GlassProjectorScreen extends HandledScreen<GlassProjectorScreenHand
 
         handler.addListener(this);
 
-        channelList = new NewGuiChannelList(client, guiLeft, guiTop, xSize, ySize, guiTop, guiTop + xSize, 20);
+        channelList = new NewGuiChannelList(client, guiLeft + 5, guiTop, xSize - 10, ySize - 22, guiTop + 11, guiTop + ySize - 5, 8);
         channelList.addElement("test1");
         channelList.addElement("test2");
         addSelectableChild(channelList);

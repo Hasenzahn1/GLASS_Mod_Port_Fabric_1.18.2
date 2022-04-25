@@ -1,5 +1,6 @@
 package me.hasenzahn1.glass_fabric_port.gui.widget;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -60,19 +61,16 @@ public class NewGuiChannelList extends EntryListWidget<NewGuiChannelList.Channel
     }
 
     public void debug(double mouseX, double mouseY, int button){
-        System.out.println(getEntryAtPosition(mouseX, mouseY));
-        int i = this.getRowWidth() / 2;
-        int j = this.left + this.width / 2;
-        int k = j - i;
-        int l = j + i;
-        int m = MathHelper.floor(mouseY - (double)this.top) - this.headerHeight + (int)this.getScrollAmount() - 4;
-        int n = m / this.itemHeight;
-        System.out.println(i + " " + j + " " + k + " " + l + " " + m + " " + n + " " + getScrollAmount());
     }
 
     @Override
     public void appendNarrations(NarrationMessageBuilder builder) {
 
+    }
+
+    @Override
+    protected int getScrollbarPositionX() {
+        return getRowRight();
     }
 
     public static class ChannelListEntry extends Entry<NewGuiChannelList.ChannelListEntry>{
@@ -87,7 +85,8 @@ public class NewGuiChannelList extends EntryListWidget<NewGuiChannelList.Channel
 
         @Override
         public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-
+            matrices.push();
+            /*
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder builder = tessellator.getBuffer();
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
@@ -100,14 +99,13 @@ public class NewGuiChannelList extends EntryListWidget<NewGuiChannelList.Channel
             builder.vertex(x, y, 0).color(index * 100, 0, 0, 255).next();
             tessellator.draw();
 
-
-
-
-
-
-
+             */
+            float factor = 0.7f;
+            matrices.scale(factor, factor, 0);
             drawCenteredText(matrices, parent.renderer, text, x + (entryWidth / 2), y + (entryHeight / 4), 0xff0000);
+
             //System.out.println("Render: " + index * 100 + " " + x + " " + y + " " + entryWidth + " " + entryHeight + " " + mouseX + " " + mouseY + " " + hovered + " " + tickDelta);
+            matrices.pop();
         }
 
 
