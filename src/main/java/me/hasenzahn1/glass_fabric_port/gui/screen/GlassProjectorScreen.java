@@ -60,23 +60,31 @@ public class GlassProjectorScreen extends HandledScreen<GlassProjectorScreenHand
     @Override
     protected void init() {
         super.init();
+        handler.addListener(this);
 
         int guiLeft = (this.width - this.xSize) / 2;
         int guiTop = (this.height - this.ySize) / 2;
 
         handler.addListener(this);
 
-        channelList = new NewGuiChannelList(client, 1000, 1000, 20, 1200, 20);
+        channelList = new NewGuiChannelList(client, guiLeft, guiTop, xSize, ySize, guiTop, guiTop + xSize, 20);
         channelList.addElement("test1");
         channelList.addElement("test2");
         addSelectableChild(channelList);
+
+        //channelList.
 
         client.keyboard.setRepeatEvents(true);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if(!channelList.mouseClicked(mouseX, mouseY, button))
+        System.out.print(mouseX + " | " + mouseY + " | ");
+        System.out.println(channelList.isMouseOver(mouseX, mouseY));
+        channelList.debug(mouseX, mouseY, button);
+        boolean value = channelList.mouseClicked(mouseX, mouseY, button);
+        // System.out.println(value);
+        if(value)
             return super.mouseClicked(mouseX, mouseY, button);
         return true;
     }
@@ -86,6 +94,28 @@ public class GlassProjectorScreen extends HandledScreen<GlassProjectorScreenHand
         super.removed();
         client.keyboard.setRepeatEvents(false);
     }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        System.out.println("Dragged");
+        channelList.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        System.out.println("Released");
+        channelList.mouseReleased(mouseX, mouseY, button);
+        return super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+        System.out.println("Scrolled");
+        channelList.mouseScrolled(mouseX, mouseY, amount);
+        return super.mouseScrolled(mouseX, mouseY, amount);
+    }
+
 
     @Override
     protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {}
