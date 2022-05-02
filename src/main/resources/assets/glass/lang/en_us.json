@@ -7,6 +7,7 @@
   "glass.gui.channelName" : "Channel Name",
   "glass.gui.publicChannel" : "Public Channel",
   "glass.gui.public": "<Public>",
+  "glass.gui.availableChannels": "Available Channels",
 
   "gui.yes" : "Yes",
   "gui.no" : "No"

@@ -1,5 +1,6 @@
 package me.hasenzahn1.glass_fabric_port.gui.screen;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.hasenzahn1.glass_fabric_port.gui.screen_handler.GlassProjectorScreenHandler;
 import me.hasenzahn1.glass_fabric_port.gui.widget.NewGuiChannelList;
@@ -11,14 +12,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerListener;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 public class GlassProjectorScreen extends HandledScreen<GlassProjectorScreenHandler> implements ScreenHandlerListener {
 
     private static final Identifier BACKGROUND_TEXTURE = new Identifier("glass", "textures/gui/glass_projector.png");
 
-    public int xSize = 93;
-    public int ySize = 75;
+    private final int xSize = 93;
+    private final int ySize = 75;
+    private int guiLeft, guiTop;
 
     private NewGuiChannelList channelList;
 
@@ -32,9 +35,9 @@ public class GlassProjectorScreen extends HandledScreen<GlassProjectorScreenHand
         RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
-        int x = (width - 93) / 2;
-        int y = (height - 75) / 2;
-        drawTexture(matrices, x, y, 0, 0, 93, 75);
+        int x = (width - xSize) / 2;
+        int y = (height - ySize) / 2;
+        drawTexture(matrices, x, y, 0, 0, xSize, ySize);
 
     }
 
@@ -44,6 +47,11 @@ public class GlassProjectorScreen extends HandledScreen<GlassProjectorScreenHand
         super.render(matrices, mouseX, mouseY, delta);
         channelList.render(matrices, mouseX, mouseY, delta);
         drawMouseoverTooltip(matrices, mouseX, mouseY);
+
+        matrices.push();
+        matrices.scale(.5f, .5f, .5f);
+        drawTextWithShadow(matrices, textRenderer, new TranslatableText("glass.gui.availableChannels"), (guiLeft + 5) * 2, (guiTop + 5) * 2, 16777215);
+        matrices.pop();
     }
 
     @Override
@@ -61,17 +69,16 @@ public class GlassProjectorScreen extends HandledScreen<GlassProjectorScreenHand
         super.init();
         handler.addListener(this);
 
-        int guiLeft = (this.width - this.xSize) / 2;
-        int guiTop = (this.height - this.ySize) / 2;
+        guiLeft = (this.width - this.xSize) / 2;
+        guiTop = (this.height - this.ySize) / 2;
 
         handler.addListener(this);
 
-        channelList = new NewGuiChannelList(client, guiLeft + 5, guiTop, xSize - 10, ySize - 22, guiTop + 11, guiTop + ySize - 5, 8);
-        channelList.addElement("test1");
-        channelList.addElement("test2");
+        channelList = new NewGuiChannelList(client, guiLeft + 5, guiTop, xSize-17, ySize - 22, guiTop + 11, guiTop + ySize-5, 8, width, height);
+        for (int i = 0; i < 100; i++){
+            channelList.addElement("test" + i);
+        }
         addSelectableChild(channelList);
-
-        //channelList.
 
         client.keyboard.setRepeatEvents(true);
     }
