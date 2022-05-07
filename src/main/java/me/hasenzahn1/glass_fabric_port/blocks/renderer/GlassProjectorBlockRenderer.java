@@ -14,7 +14,7 @@ import net.minecraft.item.Items;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3f;
 
-public class GlassProjectorBlockRenderer<T extends BlockEntity> implements BlockEntityRenderer {
+public class GlassProjectorBlockRenderer<T extends BlockEntity> implements BlockEntityRenderer<T> {
 
     public static ItemStack stack = new ItemStack(Items.BEACON, 1);
 

@@ -4,9 +4,11 @@
   "package": "me.hasenzahn1.glass_fabric_port.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+
   ],
   "client": [
-    "ExampleMixin"
+    "MixinMinecraftClient",
+    "MixinClientPlayNetworkHandler"
   ],
   "injectors": {
     "defaultRequire": 1

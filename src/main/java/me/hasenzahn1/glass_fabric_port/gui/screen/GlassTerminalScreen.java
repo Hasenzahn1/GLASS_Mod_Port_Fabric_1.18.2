@@ -1,11 +1,10 @@
 package me.hasenzahn1.glass_fabric_port.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import me.hasenzahn1.glass_fabric_port.GLASSMod;
 import me.hasenzahn1.glass_fabric_port.gui.screen_handler.GlassTerminalScreenHandler;
+import me.hasenzahn1.glass_fabric_port.packet.PacketHandler;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -129,7 +128,7 @@ public class GlassTerminalScreen extends HandledScreen<GlassTerminalScreenHandle
         buf.writeBlockPos(handler.getPos());
         buf.writeString((isPublicChannel ? "public:" : handler.getPlayerName() + ":") + channelNameWidget.getText());
 
-        ClientPlayNetworking.send(GLASSMod.SET_CHANNEL_PACKET, buf);
+        ClientPlayNetworking.send(PacketHandler.SET_CHANNEL_PACKET, buf);
         close();
     }
 

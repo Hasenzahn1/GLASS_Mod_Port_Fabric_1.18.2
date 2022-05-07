@@ -13,7 +13,7 @@ import net.minecraft.item.Items;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3f;
 
-public class GlassTerminalBlockRenderer<T extends BlockEntity> implements BlockEntityRenderer {
+public class GlassTerminalBlockRenderer<T extends BlockEntity> implements BlockEntityRenderer<T> {
 
     public static ItemStack stack = new ItemStack(Items.GLASS, 1);
 

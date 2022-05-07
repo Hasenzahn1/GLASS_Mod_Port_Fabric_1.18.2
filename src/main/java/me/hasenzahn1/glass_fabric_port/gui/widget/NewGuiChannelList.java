@@ -3,12 +3,9 @@ package me.hasenzahn1.glass_fabric_port.gui.widget;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.EntryListWidget;
-import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 
 public class NewGuiChannelList extends EntryListWidget<NewGuiChannelList.ChannelListEntry> {
@@ -29,9 +26,8 @@ public class NewGuiChannelList extends EntryListWidget<NewGuiChannelList.Channel
         System.out.println(getScrollAmount());
         left = x;
         right = x + width;
-        //System.out.println(left + " " + right + " " + top + " " + bottom);
-        MinecraftClient.getInstance().player.sendMessage(new LiteralText(left + " " + right + " " + top + " " + bottom), false);
     }
+
 
     @Override
     protected void renderBackground(MatrixStack matrices) {
@@ -39,7 +35,11 @@ public class NewGuiChannelList extends EntryListWidget<NewGuiChannelList.Channel
 
         RenderSystem.setShaderTexture(0, new Identifier("textures/gui/recipe_book.png"));
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        drawTexture(matrices, left, top, 22, 22, width, bottom - top);
+        drawTexture(matrices, left, top, width, bottom - top, 22, 22, 16, 16, 256, 256);
+    }
+
+    public String getChannelName(){
+        return getFocused() != null ? getFocused().text : "";
     }
 
     @Override
@@ -80,6 +80,15 @@ public class NewGuiChannelList extends EntryListWidget<NewGuiChannelList.Channel
 
     }
 
+    public void setSelected(String channel){
+        for(ChannelListEntry entry : children()){
+            if(entry.text.equals(channel)){
+                setSelected(entry);
+                break;
+            }
+        }
+    }
+
     @Override
     protected int getScrollbarPositionX() {
         return getRowRight();
@@ -88,11 +97,14 @@ public class NewGuiChannelList extends EntryListWidget<NewGuiChannelList.Channel
     public static class ChannelListEntry extends Entry<NewGuiChannelList.ChannelListEntry>{
 
         protected final NewGuiChannelList parent;
-        protected final String text;
+        protected final String text, drawText;
+        private boolean rendered;
 
         public ChannelListEntry(NewGuiChannelList parent, String text){
             this.parent = parent;
             this.text = text;
+            rendered = false;
+            drawText = (text.split(":")[0].equals("public") ? "<Public> " : "") +  text.split(":")[1];
         }
         public void test() {
             System.out.println("test");
@@ -100,26 +112,15 @@ public class NewGuiChannelList extends EntryListWidget<NewGuiChannelList.Channel
 
         @Override
         public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            if(y < parent.top || y + entryHeight > parent.bottom) return;
+            if(y < parent.top || y + entryHeight > parent.bottom) {
+                rendered = false;
+                return;
+            }
+            rendered = true;
             matrices.push();
-            /*
-            Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder builder = tessellator.getBuffer();
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            RenderSystem.setShaderColor(1, 1, 1, 1);
 
-            builder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-            builder.vertex(x, y + entryHeight, 0).color(index * 100, 0, 0, 255).next();
-            builder.vertex(x + entryWidth, y + entryHeight, 0).color(index * 100, 0, 0, 255).next();
-            builder.vertex(x + entryWidth, y, 0).color(index * 100, 0, 0, 255).next();
-            builder.vertex(x, y, 0).color(index * 100, 0, 0, 255).next();
-            tessellator.draw();
-             */
-
-            float factor = 0.7f;
-
-            matrices.scale(0.5f, 0.5f, 1f);
-            drawStringWithShadow(matrices, parent.renderer, text, (x + 2) * 2, y * 2, index % 2 == 0 ? 0xFFFFFF : 0XAAAAAA);
+            drawStringWithShadow(matrices, parent.renderer, drawText, (x + 2), y + 2, index % 2 == 0 ? 0xFFFFFF : 0XAAAAAA);
+            //drawStringWithShadow(matrices, parent.renderer, text, (x + 2) * 2, y * 2, index % 2 == 0 ? 0xFFFFFF : 0XAAAAAA);
 
             //System.out.println("Render: " + index * 100 + " " + x + " " + y + " " + entryWidth + " " + entryHeight + " " + mouseX + " " + mouseY + " " + hovered + " " + tickDelta);
             matrices.pop();
@@ -129,8 +130,8 @@ public class NewGuiChannelList extends EntryListWidget<NewGuiChannelList.Channel
 
         @Override
         public boolean mouseClicked(double mouseX, double mouseY, int button) {
-            System.out.println("Test");
-            parent.setSelected(this);
+            //System.out.println("Test");
+            if(rendered) parent.setSelected(this);
             return true;
         }
 

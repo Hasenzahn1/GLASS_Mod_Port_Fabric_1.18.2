@@ -19,7 +19,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-public class GlassProjectorBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory {
+public class GlassProjectorBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory, IInventoryBlock {
 
     public String channel;
 
@@ -42,6 +42,7 @@ public class GlassProjectorBlockEntity extends BlockEntity implements ExtendedSc
     @Override
     public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
         buf.writeString(channel);
+        buf.writeBlockPos(pos);
     }
 
     @Override
@@ -53,6 +54,10 @@ public class GlassProjectorBlockEntity extends BlockEntity implements ExtendedSc
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
         return new GlassProjectorScreenHandler(syncId, inv);
+    }
+
+    public void update(String channel){
+        this.channel = channel;
     }
 
     @Override
@@ -67,4 +72,7 @@ public class GlassProjectorBlockEntity extends BlockEntity implements ExtendedSc
         nbt.putString("channel", channel);
     }
 
+    public String getChannel() {
+        return channel;
+    }
 }
